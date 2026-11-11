@@ -1,9 +1,9 @@
 # Xiaomi TV Backlight Control
 
-Control Xiaomi TV backlight with the Play button.
+Control Xiaomi TV backlight with the PatchWall button.
 
-Assign Play in the app. Press it to open the brightness slider, then use ↑ / ↓.
-Press Play again or Back to close it.
+Assign PatchWall in the app. Press it to open the brightness slider, then use ↑ / ↓.
+Press PatchWall again or Back to close it.
 
 ## Install
 
