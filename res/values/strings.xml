@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="app_name">Xiaomi TV Backlight Control</string>
+  <string name="backlight">Backlight</string>
+  <string name="tagline">Your screen, at a comfortable brightness.</string>
+  <string name="remote_title">Remote control</string>
+  <string name="remote_hint">Press your shortcut to open the brightness panel. Use ↑ and ↓ to adjust.</string>
+  <string name="assign">Choose shortcut</string>
+  <string name="change_key">Change shortcut · %1$s</string>
+  <string name="reset">Reset shortcut</string>
+  <string name="accessibility">Enable remote access</string>
+  <string name="access_on">Remote access is enabled</string>
+  <string name="access_off">Enable accessibility access to listen to the remote.</string>
+  <string name="capture">Press a remote button. Back cancels.</string>
+  <string name="capture_hint">Choose a spare button. It will replace its normal action. No OK confirmation needed.</string>
+  <string name="saved">Shortcut saved · %1$s</string>
+  <string name="rejected">%1$s is reserved for navigation. Choose another button.</string>
+  <string name="cancelled">Shortcut selection cancelled.</string>
+  <string name="key_help">App buttons such as Netflix can be reassigned when your TV sends them to accessibility. Firmware shortcuts may still launch the original app.</string>
+  <string name="test_key">Test shortcut</string>
+  <string name="test_hint">Press your shortcut now. If another app opens, this TV handles it before accessibility.</string>
+  <string name="test_ok">Button received and consumed · %1$s</string>
+  <string name="interrupted">Selection paused. If another app opened, try another button.</string>
+  <string name="ha_title">Home Assistant</string>
+  <string name="ha_hint">Connect your TV to control its backlight from your dashboards.</string>
+  <string name="search">Find Home Assistant</string>
+  <string name="manual">Enter server address</string>
+  <string name="server">Server address</string>
+  <string name="save">Save</string>
+  <string name="cancel">Cancel</string>
+  <string name="searching">Searching your local network…</string>
+  <string name="not_found">No servers found. Enter the address manually.</string>
+  <string name="pair">Pair with Home Assistant</string>
+  <string name="pair_hint">Install the Xiaomi TV Backlight integration in Home Assistant, add your TV and enter this code within two minutes.</string>
+  <string name="pair_expired">Pairing closed</string>
+  <string name="status_title">Device status</string>
+  <string name="permission_ok">Backlight permission granted</string>
+  <string name="permission_missing">Backlight permission required. See the installation guide.</string>
+  <string name="rest_ok">Local API is running</string>
+  <string name="rest_off">Local API is starting or unavailable</string>
+  <string name="about">Project &amp; setup guide</string>
+  <string name="unpublished">The GitHub project link will appear after repository creation.</string>
+  <string name="pair_connected">Home Assistant paired</string>
+  <string name="unsupported">Backlight control is unavailable on this firmware.</string>
+  <string name="access_fallback">This TV does not expose a direct accessibility shortcut. Open Settings → Device preferences → Accessibility and enable Xiaomi TV Backlight Control. If the section is hidden by the firmware, follow the installation guide.</string>
+</resources>
