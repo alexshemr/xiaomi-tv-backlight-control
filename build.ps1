@@ -18,10 +18,10 @@ try {
         throw 'ZXing checksum mismatch'
     }
     New-Item -ItemType Directory -Force build/classes,build/dex,build/generated | Out-Null
-    Invoke-BuildTool "$tools/aapt.exe" @('package','-f','-m','-M','AndroidManifest.xml','-S','res','-I',$platform,'-J','build/generated')
+    Invoke-BuildTool "$tools/aapt.exe" @('package','-f','-m','-M','AndroidManifest.xml','-S','res','-A','assets','-I',$platform,'-J','build/generated')
     Invoke-BuildTool "$Jdk/bin/javac.exe" (@('-encoding','UTF-8','--release','8','-classpath',"$platform;$qr",'-d','build/classes') + @(Get-ChildItem src/*.java,build/generated/local/ha/tvbacklight/R.java | ForEach-Object FullName))
     Invoke-BuildTool "$tools/d8.bat" (@('--lib',$platform,'--min-api','26','--output','build/dex',$qr) + @(Get-ChildItem build/classes -Recurse -Filter *.class | ForEach-Object FullName))
-    Invoke-BuildTool "$tools/aapt.exe" @('package','-f','-M','AndroidManifest.xml','-S','res','-I',$platform,'-F','build/unsigned.apk')
+    Invoke-BuildTool "$tools/aapt.exe" @('package','-f','-M','AndroidManifest.xml','-S','res','-A','assets','-I',$platform,'-F','build/unsigned.apk')
     Push-Location build/dex
     try { Invoke-BuildTool "$tools/aapt.exe" @('add','../unsigned.apk','classes.dex') } finally { Pop-Location }
     Invoke-BuildTool "$tools/zipalign.exe" @('-f','4','build/unsigned.apk','build/aligned.apk')
@@ -31,6 +31,7 @@ try {
     Invoke-BuildTool "$tools/apksigner.bat" @('sign','--ks','build/local-signing.p12','--ks-pass','pass:localbuild','--out','build/tv-backlight.apk','build/aligned.apk')
     Invoke-BuildTool "$tools/apksigner.bat" @('verify','--min-sdk-version','26','build/tv-backlight.apk')
 } finally { Pop-Location }
+
 
 
 
