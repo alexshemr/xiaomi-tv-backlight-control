@@ -22,6 +22,6 @@ adb shell pm grant local.ha.tvbacklight android.permission.WRITE_SECURE_SETTINGS
 [Интеграция Home Assistant](https://github.com/alexshemr/ha-xiaomi-tv-backlight) добавляет сущность подсветки для автоматизаций.
 
 На тестовом ТВ установлен [CleanYourTV](https://github.com/Gathin23/cleanyourtv).
-После отключения PatchWall его кнопку тоже можно назначить для управления подсветкой.
+PatchWall отключён. Его кнопка открывает шкалу подсветки.
 
 [English](README.md)

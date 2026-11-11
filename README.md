@@ -22,6 +22,6 @@ English and Russian. System light/dark theme.
 [Home Assistant integration](https://github.com/alexshemr/ha-xiaomi-tv-backlight) adds a backlight entity for automations.
 
 The tested TV uses [CleanYourTV](https://github.com/Gathin23/cleanyourtv).
-With PatchWall disabled, its button can also be assigned to brightness control.
+PatchWall is disabled. Its button opens the backlight slider.
 
 [Русский](README.ru.md)
