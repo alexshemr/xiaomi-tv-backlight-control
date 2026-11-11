@@ -3,7 +3,7 @@
 Give the PatchWall button a useful new job. Press it to open a slim backlight
 panel, then use Up and Down to make your Xiaomi TV comfortable to watch.
 
-![App icon](res/drawable/app_icon.png)
+<img src="res/drawable/app_icon.png" alt="Xiaomi TV Backlight Control icon" width="112">
 
 ## What it does
 
@@ -111,3 +111,4 @@ networks. Keep it on your LAN. The backlight driver uses the Xiaomi setting
 `picture_backlight`, with values from 0 to 100.
 
 [Краткая инструкция на русском](README.ru.md)
+
