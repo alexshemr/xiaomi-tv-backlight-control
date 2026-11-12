@@ -7,12 +7,25 @@ import java.util.Set;
 final class KeyPanel {
     boolean visible;
     int delta;
+    boolean screenOffRequested;
+    boolean wakeRequested;
     private long lastChange;
     private final Set<Long> consumed = new HashSet<>();
     private final Set<Long> passed = new HashSet<>();
 
     boolean down(int device, int key, boolean repeat, long time, int shortcut) {
+        return down(device, key, repeat, time, shortcut, 0);
+    }
+
+    boolean down(int device, int key, boolean repeat, long time, int shortcut, int offShortcut) {
+        return down(device, key, repeat, time, shortcut, offShortcut, false);
+    }
+
+    boolean down(int device, int key, boolean repeat, long time, int shortcut,
+            int offShortcut, boolean screenOff) {
         delta = 0;
+        screenOffRequested = false;
+        wakeRequested = false;
         long press = press(device, key);
         if (passed.contains(press)) return false;
         if (consumed.contains(press)) {
@@ -20,7 +33,15 @@ final class KeyPanel {
             return true;
         }
         if (repeat) return false;
-        if (shortcut != 0 && key == shortcut) {
+        if (offShortcut != 0 && key == offShortcut) {
+            screenOffRequested = true;
+            close();
+        } else if (screenOff && key != 26 && key != 177 && key != 223 && key != 0) {
+            wakeRequested = true;
+            visible = key == 19 || key == shortcut;
+            delta = key == 19 ? 5 : 0;
+            lastChange = time;
+        } else if (shortcut != 0 && key == shortcut) {
             visible = !visible;
         } else if (visible && key == 4) {
             close();

@@ -4,6 +4,8 @@ Adjust Xiaomi TV backlight from the remote. Assign PatchWall or another supporte
 button in the app. Press it to open the brightness slider, then use ↑ / ↓ to
 adjust the level. Press the button again or Back to close the slider.
 
+![Backlight control with the PatchWall button](docs/backlight-demo.gif)
+
 The optional [Home Assistant integration](https://github.com/alexshemr/ha-xiaomi-tv-backlight)
 adds a backlight entity for automations, such as dimming the screen at night.
 
@@ -34,6 +36,17 @@ adds a backlight entity for automations, such as dimming the screen at night.
 
 4. Turn off ADB. The shortcut and Home Assistant connection work without it,
    including after a reboot.
+
+## Screen off
+
+In the app, optionally enable **Turn the screen off at 0%**, assign a separate
+screen-off button, or use both. Both options are disabled by default.
+The 0% option also applies to Home Assistant commands.
+
+While the screen is off, Up restores the image from 0% at 5%. Other remote buttons
+restore the image without passing that press to the app underneath. Power and the
+assigned screen-off button are excluded. Navigation, volume, menu, power and
+voice-assistant buttons cannot be assigned as shortcuts.
 
 ## Tested setup
 

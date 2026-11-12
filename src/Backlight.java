@@ -19,11 +19,13 @@ final class Backlight {
         return level;
     }
 
-    static int write(Context context, int level) {
+    static synchronized int write(Context context, int level) {
         if (level < 0 || level > 100) throw new IllegalArgumentException("Invalid level");
         if (!Settings.Global.putInt(context.getContentResolver(), Bridge.KEY, level)) {
             throw new IllegalStateException("Backlight write failed");
         }
+        ScreenPower.setOff(context, level == 0
+            && preferences(context).getBoolean("screen_off_at_zero", false));
         return read(context);
     }
 }

@@ -33,9 +33,11 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force build/test | Out-Null
-          & "$env:JAVA_HOME/bin/javac" -d build/test src/KeyPanel.java tests/KeyPanelTest.java
+          & "$env:JAVA_HOME/bin/javac" -d build/test -classpath "$env:ANDROID_HOME/platforms/android-34/android.jar" src/KeyPanel.java src/KeyPolicy.java tests/KeyPanelTest.java tests/KeyPolicyTest.java
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           & "$env:JAVA_HOME/bin/java" -cp build/test local.ha.tvbacklight.KeyPanelTest
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & "$env:JAVA_HOME/bin/java" -cp build/test local.ha.tvbacklight.KeyPolicyTest
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Build
         shell: pwsh

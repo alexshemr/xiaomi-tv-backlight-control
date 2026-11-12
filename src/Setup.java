@@ -19,6 +19,8 @@ public final class Setup extends Activity {
     private TextView status, connection, accessState, apiState;
     private boolean capturing, testing;
     private int capturedKey;
+    private String capturePreference = RemoteKeys.MODIFIER;
+    private Button offCapture;
     private int ink, muted, surface, accent, base;
     private BrightnessGauge preview;
     private NetworkDiscovery network;
@@ -78,6 +80,7 @@ public final class Setup extends Activity {
         remote.addView(accessState);
         capture = button(remote, "", () -> {
             testing = false;
+            capturePreference = RemoteKeys.MODIFIER;
             capturing = true;
             capture.setText(R.string.capture);
             status.setText(R.string.capture_hint);
@@ -99,6 +102,35 @@ public final class Setup extends Activity {
         button(remote, getString(R.string.accessibility), this::openAccessibility);
         remote.addView(text(getString(R.string.key_help), 13, muted, false));
         settings.addView(remote);
+
+        LinearLayout screen = section(R.string.screen_off_title);
+        Switch zero = new Switch(this);
+        zero.setText(R.string.screen_off_zero);
+        zero.setEnabled(checkSelfPermission(android.Manifest.permission.WRITE_SECURE_SETTINGS)
+            == android.content.pm.PackageManager.PERMISSION_GRANTED);
+        zero.setTextColor(ink);
+        zero.setTextSize(16);
+        zero.setPadding(0, dp(12), 0, dp(12));
+        zero.setChecked(preferences.getBoolean("screen_off_at_zero", false));
+        zero.setOnCheckedChangeListener((view, checked) -> {
+            preferences.edit().putBoolean("screen_off_at_zero", checked).apply();
+            if (!checked && ScreenPower.isOff(this)) ScreenPower.setOff(this, false);
+        });
+        screen.addView(zero);
+        screen.addView(text(getString(R.string.screen_off_hint), 14, muted, false));
+        offCapture = button(screen, "", () -> {
+            capturePreference = "screen_off_shortcut";
+            testing = false;
+            capturing = true;
+            offCapture.setText(R.string.capture);
+            status.setText(R.string.capture_hint);
+        });
+        button(screen, getString(R.string.screen_off_reset), () -> {
+            capturing = false;
+            preferences.edit().remove("screen_off_shortcut").apply();
+            updateLabel();
+        });
+        settings.addView(screen);
 
         LinearLayout ha = section(R.string.ha_title);
         ha.addView(text(getString(R.string.ha_hint), 15, muted, false));
@@ -187,6 +219,11 @@ public final class Setup extends Activity {
     }
     private int dp(int value) { return Math.round(value * getResources().getDisplayMetrics().density); }
     private void updateLabel() {
+        if (offCapture != null) {
+            int off = preferences.getInt("screen_off_shortcut", 0);
+            offCapture.setText(off == 0 ? getString(R.string.screen_off_assign)
+                : getString(R.string.screen_off_key, KeyEvent.keyCodeToString(off)));
+        }
         int key = preferences.getInt(RemoteKeys.MODIFIER, 0);
         capture.setText(key == 0 ? getString(R.string.assign)
             : getString(R.string.change_key, KeyEvent.keyCodeToString(key)));
@@ -331,12 +368,17 @@ public final class Setup extends Activity {
             capturedKey = key;
             updateLabel();
             status.setText(R.string.cancelled);
-        } else if (key == KeyEvent.KEYCODE_UNKNOWN || key == KeyEvent.KEYCODE_HOME
-                || key == KeyEvent.KEYCODE_POWER || key == KeyEvent.KEYCODE_ENTER
-                || (key >= KeyEvent.KEYCODE_DPAD_UP && key <= KeyEvent.KEYCODE_DPAD_CENTER)) {
+        } else if (!KeyPolicy.canAssign(key)) {
             status.setText(getString(R.string.rejected, KeyEvent.keyCodeToString(key)));
         } else {
-            preferences.edit().putInt(RemoteKeys.MODIFIER, key).apply();
+            String other = capturePreference.equals(RemoteKeys.MODIFIER)
+                ? "screen_off_shortcut" : RemoteKeys.MODIFIER;
+            if (key == preferences.getInt(other, 0)) {
+                status.setText(R.string.key_conflict);
+                Toast.makeText(this, R.string.key_conflict, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            preferences.edit().putInt(capturePreference, key).apply();
             capturing = false;
             capturedKey = key;
             updateLabel();

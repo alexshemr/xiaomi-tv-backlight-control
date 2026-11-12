@@ -23,6 +23,29 @@ public final class KeyPanelTest {
         panel.up(1, 100);
         check(panel.down(1, 4, false, 900, 100) && !panel.visible, "Back closes");
         check(panel.up(1, 4), "Back release consumed");
+        panel.reset();
+        check(panel.down(1, 101, false, 1000, 100, 101) && panel.screenOffRequested,
+            "Dedicated off button requested");
+        check(!panel.visible && panel.up(1, 101), "Off button release consumed");
+        check(!panel.down(1, 101, false, 1100, 100, 0), "Unassigned off button passes");
+        panel.up(1, 101);
+        panel.reset();
+        check(panel.down(1, 19, false, 1200, 100, 101, true)
+            && panel.wakeRequested && panel.delta == 5, "Up wakes at plus five");
+        check(panel.up(1, 19), "Wake release consumed");
+        panel.reset();
+        check(panel.down(1, 21, false, 1300, 100, 101, true)
+            && panel.wakeRequested, "Other key wakes");
+        check(panel.down(1, 21, true, 1500, 100, 101, false)
+            && !panel.wakeRequested, "Wake repeat consumed without replay");
+        check(panel.up(1, 21), "Other wake release consumed");
+        panel.reset();
+        check(!panel.down(1, 26, false, 1600, 100, 101, true)
+            && !panel.wakeRequested, "Power does not wake through app");
+        panel.up(1, 26);
+        check(panel.down(1, 101, false, 1700, 100, 101, true)
+            && !panel.wakeRequested && panel.screenOffRequested, "Off key stays off");
+        panel.up(1, 101);
         System.out.println("Key panel behavior passed");
     }
     private static void check(boolean condition, String message) {

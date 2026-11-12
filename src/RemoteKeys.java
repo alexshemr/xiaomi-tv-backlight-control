@@ -42,25 +42,44 @@ public final class RemoteKeys extends AccessibilityService {
 
     @Override protected boolean onKeyEvent(KeyEvent event) {
         int key = event.getKeyCode();
-        if (captureHandler != null && captureHandler.test(event)) return true;
+        boolean screenOff = ScreenPower.needsWake(this);
+        if (!screenOff && captureHandler != null && captureHandler.test(event)) return true;
         if (event.getAction() == KeyEvent.ACTION_UP) return keys.up(event.getDeviceId(), key);
         if (event.getAction() != KeyEvent.ACTION_DOWN) return false;
-        if (configuring) {
+        if (configuring && !screenOff) {
             if (event.getRepeatCount() == 0) {
                 Log.i("TVBacklight", "Accessibility capture key=" + KeyEvent.keyCodeToString(key));
             }
             return false;
         }
         boolean consumed = keys.down(event.getDeviceId(), key, event.getRepeatCount() != 0,
-            event.getEventTime(), preferences.getInt(MODIFIER, 0));
+            event.getEventTime(), preferences.getInt(MODIFIER, 0),
+            preferences.getInt("screen_off_shortcut", 0), screenOff);
         if (key == preferences.getInt(MODIFIER, 0) && event.getRepeatCount() == 0) {
             Log.i("TVBacklight", "Shortcut received; panel=" + keys.visible);
         }
-        if (!consumed) return false;
+        if (!consumed) {
+            if (key == KeyEvent.KEYCODE_POWER || key == KeyEvent.KEYCODE_TV_POWER
+                    || key == KeyEvent.KEYCODE_SLEEP) ScreenPower.forgetRequest();
+            return false;
+        }
         try {
-            if (keys.delta != 0) Backlight.write(this,
+            if (keys.screenOffRequested) {
+                ScreenPower.setOff(this, true);
+                dismiss.run();
+                return true;
+            }
+            if (keys.wakeRequested) {
+                int level = Math.min(100, Math.max(5, Backlight.read(this) + keys.delta));
+                Backlight.write(this, level);
+            }
+            if (keys.delta == 0 && key == preferences.getInt(MODIFIER, 0)
+                    && keys.visible) ScreenPower.setOff(this, false);
+            if (keys.delta != 0 && !keys.wakeRequested) Backlight.write(this,
                 Math.max(0, Math.min(100, Backlight.read(this) + keys.delta)));
-            if (keys.visible) {
+            if (ScreenPower.isOff(this)) {
+                dismiss.run();
+            } else if (keys.visible) {
                 showPanel();
                 refresh();
                 handler.removeCallbacks(dismiss);
