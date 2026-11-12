@@ -11,30 +11,43 @@ adds a backlight entity for automations, such as dimming the screen at night.
 
 ## Installation and permissions
 
-1. Temporarily enable ADB debugging on the TV. Download the [APK](https://github.com/alexshemr/xiaomi-tv-backlight-control/releases/latest)
-   and install it with ADB:
+1. Download [Platform-Tools for Windows](https://developer.android.com/tools/releases/platform-tools)
+   and extract to `C:\platform-tools`. Download the [APK](https://github.com/alexshemr/xiaomi-tv-backlight-control/releases/latest)
+   into the same folder, or install it on the TV from a USB drive.
 
-   ```sh
-   adb connect TV_IP:5555
-   adb install -r xiaomi-tv-backlight-control.apk
-   adb shell pm grant local.ha.tvbacklight android.permission.WRITE_SECURE_SETTINGS
+2. Connect the PC and TV to the same local network and enable ADB debugging on the TV.
+   Open PowerShell and run:
+
+   ```powershell
+   cd C:\platform-tools
+
+   # Replace 192.168.1.1 with your TV's IP address on the local network
+   .\adb.exe connect 192.168.1.1:5555
    ```
 
-   Accept the debugging prompt on the TV when connecting. The last command grants
-   permission to change the TV backlight setting.
+   Accept the debugging prompt on the TV, then run:
 
-2. Open TV Settings → Device preferences → Accessibility and enable
+   ```powershell
+   # Skip this line if the APK is already installed from USB
+   .\adb.exe install -r xiaomi-tv-backlight-control.apk
+   .\adb.exe shell pm grant local.ha.tvbacklight android.permission.WRITE_SECURE_SETTINGS
+   ```
+
+   The last command grants backlight access once. It is required even when
+   installing from USB and cannot be replaced by a standard settings toggle.
+
+3. Open TV Settings → Device preferences → Accessibility and enable
    **Xiaomi TV Backlight Control**. On a Russian system, the service is called
    **Подсветка Xiaomi TV**. This lets the app receive the shortcut and arrow keys
    while another app is open. If the in-app shortcut cannot open this section,
    open it through the TV settings.
 
-3. Return to the app, choose **Choose shortcut** and press PatchWall.
+4. Return to the app, choose **Choose shortcut** and press PatchWall.
    The assigned button opens the backlight slider instead of its original action.
    Use **Test shortcut** to check other buttons. Some firmware handles app buttons
    before the accessibility service can intercept them.
 
-4. Turn off ADB. The shortcut and Home Assistant connection work without it,
+5. Turn off ADB. The shortcut and Home Assistant connection work without it,
    including after a reboot.
 
 ## Screen off
