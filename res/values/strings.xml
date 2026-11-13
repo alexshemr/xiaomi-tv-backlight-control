@@ -8,9 +8,9 @@
   <string name="assign">Choose shortcut</string>
   <string name="change_key">Change shortcut · %1$s</string>
   <string name="reset">Reset shortcut</string>
-  <string name="accessibility">Enable remote access</string>
-  <string name="access_on">Remote access is enabled</string>
-  <string name="access_off">Enable accessibility access to listen to the remote.</string>
+  <string name="accessibility">Accessibility</string>
+  <string name="access_on">Accessibility service: enabled and running</string>
+  <string name="access_off">Accessibility service: disabled</string>
   <string name="capture">Press a remote button. Back cancels.</string>
   <string name="capture_hint">Choose a spare button. It will replace its normal action. No OK confirmation needed.</string>
   <string name="saved">Shortcut saved · %1$s</string>
@@ -34,15 +34,15 @@
   <string name="pair_hint">Install the Xiaomi TV Backlight integration in Home Assistant, add your TV and enter this code within two minutes.</string>
   <string name="pair_expired">Pairing closed</string>
   <string name="status_title">Device status</string>
-  <string name="permission_ok">Backlight permission granted</string>
-  <string name="permission_missing">Backlight permission required. See the installation guide.</string>
+  <string name="permission_ok">ADB permission: granted</string>
+  <string name="permission_missing">ADB permission: not granted</string>
   <string name="rest_ok">Local API is running</string>
   <string name="rest_off">Local API is starting or unavailable</string>
   <string name="about">Project &amp; setup guide</string>
   <string name="unpublished">The GitHub project link will appear after repository creation.</string>
   <string name="pair_connected">Home Assistant paired</string>
   <string name="unsupported">Backlight control is unavailable on this firmware.</string>
-  <string name="access_fallback">This TV does not expose a direct accessibility shortcut. Open Settings → Device preferences → Accessibility and enable Xiaomi TV Backlight Control. If the section is hidden by the firmware, follow the installation guide.</string>
+  <string name="access_fallback">Open Device preferences → Accessibility → Xiaomi TV Backlight Control.</string>
 <string name="screen_off_title">Screen off</string>
 <string name="screen_off_zero">Turn the screen off at 0%</string>
 <string name="screen_off_hint" formatted="false">Optional. The 0% setting also applies to Home Assistant commands. Any remote key brings the screen back, except Power and the screen-off button. Up raises 0% to 5%.</string>
@@ -50,4 +50,9 @@
 <string name="screen_off_key">Screen-off button · %1$s</string>
 <string name="screen_off_reset">Remove screen-off button</string>
 <string name="key_conflict">This button is already assigned to another action.</string>
+  <string name="access_waiting">Accessibility service: enabled, not running</string>
+  <string name="access_setup_hint">Enable Xiaomi TV Backlight Control in Settings → Device preferences → Accessibility.</string>
+  <string name="access_restart_hint">The service is enabled but has not connected. Turn it off and on in Accessibility settings.</string>
+  <string name="permission_setup_hint">Grant the backlight permission once from a computer:\nadb shell pm grant local.ha.tvbacklight android.permission.WRITE_SECURE_SETTINGS\nSee Project &amp; setup guide for ADB installation and connection steps.</string>
+  <string name="setup_ready">Remote and backlight control are ready.</string>
 </resources>

@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 public final class RemoteKeys extends AccessibilityService {
     static final String MODIFIER = "shortcut";
     static boolean configuring;
+    static boolean connected;
     static java.util.function.Predicate<KeyEvent> captureHandler;
     private final KeyPanel keys = new KeyPanel();
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -38,6 +39,7 @@ public final class RemoteKeys extends AccessibilityService {
         windows = getSystemService(WindowManager.class);
         getContentResolver().registerContentObserver(
             Settings.Global.getUriFor(Bridge.KEY), false, observer);
+        connected = true;
     }
 
     @Override protected boolean onKeyEvent(KeyEvent event) {
@@ -140,7 +142,12 @@ public final class RemoteKeys extends AccessibilityService {
         removePanel();
         keys.reset();
     }
+    @Override public boolean onUnbind(android.content.Intent intent) {
+        connected = false;
+        return super.onUnbind(intent);
+    }
     @Override public void onDestroy() {
+        connected = false;
         getContentResolver().unregisterContentObserver(observer);
         removePanel();
         keys.reset();

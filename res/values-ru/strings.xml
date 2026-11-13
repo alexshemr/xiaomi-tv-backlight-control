@@ -7,9 +7,9 @@
     <string name="assign">Назначить кнопку</string>
     <string name="change_key">Изменить кнопку · %1$s</string>
     <string name="reset">Сбросить кнопку</string>
-    <string name="accessibility">Включить управление пультом</string>
-    <string name="access_on">Управление пультом включено</string>
-    <string name="access_off">Включите службу в специальных возможностях для работы с пультом.</string>
+    <string name="accessibility">Специальные возможности</string>
+    <string name="access_on">Служба специальных возможностей: включена и запущена</string>
+    <string name="access_off">Служба специальных возможностей: выключена</string>
     <string name="capture">Нажмите кнопку пульта. Назад — отмена.</string>
     <string name="capture_hint">Выберите свободную кнопку. Её обычное действие будет заменено. Подтверждать через OK не нужно.</string>
     <string name="saved">Кнопка сохранена · %1$s</string>
@@ -33,19 +33,24 @@
     <string name="pair_hint">Установите интеграцию Xiaomi TV Backlight в Home Assistant, добавьте телевизор и введите этот код в течение двух минут.</string>
     <string name="pair_expired">Сопряжение закрыто</string>
     <string name="status_title">Состояние устройства</string>
-    <string name="permission_ok">Разрешение подсветки выдано</string>
-    <string name="permission_missing">Требуется разрешение управления подсветкой. См. инструкцию установки.</string>
+    <string name="permission_ok">Разрешение через ADB: выдано</string>
+    <string name="permission_missing">Разрешение через ADB: не выдано</string>
     <string name="rest_ok">Локальный API запущен</string>
     <string name="rest_off">Локальный API запускается или недоступен</string>
     <string name="about">Проект и инструкция</string>
     <string name="unpublished">Ссылка на GitHub появится после создания репозитория.</string>
     <string name="pair_connected">Home Assistant подключён</string>
     <string name="unsupported">Управление подсветкой недоступно на этой прошивке.</string>
-<string name="access_fallback">В этой прошивке нет прямого перехода к специальным возможностям. Откройте Настройки → Настройки устройства → Специальные возможности и включите Подсветка Xiaomi TV. Если раздел скрыт прошивкой, используйте инструкцию установки.</string><string name="screen_off_title">Выключение экрана</string>
+<string name="access_fallback">Откройте Настройки устройства → Специальные возможности → Подсветка Xiaomi TV.</string><string name="screen_off_title">Выключение экрана</string>
 <string name="screen_off_zero">Выключать экран при 0%</string>
 <string name="screen_off_hint" formatted="false">Необязательно. Настройка 0% действует и для команд Home Assistant. Любая кнопка возвращает изображение, кроме питания и кнопки гашения. Нажатие ↑ повышает 0% до 5%.</string>
 <string name="screen_off_assign">Назначить кнопку выключения экрана</string>
 <string name="screen_off_key">Выключение экрана · %1$s</string>
 <string name="screen_off_reset">Убрать кнопку выключения экрана</string>
 <string name="key_conflict">Эта кнопка уже назначена для другого действия.</string>
+  <string name="access_waiting">Служба специальных возможностей: включена, не запущена</string>
+  <string name="access_setup_hint">Включите службу «Подсветка Xiaomi TV»: Настройки → Настройки устройства → Специальные возможности.</string>
+  <string name="access_restart_hint">Служба включена, но не подключилась. Выключите и включите её в специальных возможностях.</string>
+  <string name="permission_setup_hint">Один раз выдайте разрешение на управление подсветкой с компьютера:\nadb shell pm grant local.ha.tvbacklight android.permission.WRITE_SECURE_SETTINGS\nУстановка ADB и подключение описаны в разделе «Проект и инструкция».</string>
+  <string name="setup_ready">Управление пультом и подсветкой готово к работе.</string>
 </resources>

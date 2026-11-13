@@ -16,7 +16,7 @@ import java.util.UUID;
 public final class Setup extends Activity {
     private SharedPreferences preferences;
     private Button capture;
-    private TextView status, connection, accessState, apiState;
+    private TextView status, connection, accessState, permissionState, setupHint, apiState;
     private boolean capturing, testing;
     private int capturedKey;
     private String capturePreference = RemoteKeys.MODIFIER;
@@ -31,11 +31,19 @@ public final class Setup extends Activity {
             catch (RuntimeException error) { status.setText(R.string.unsupported); }
             boolean granted = checkSelfPermission(android.Manifest.permission.WRITE_SECURE_SETTINGS)
                 == android.content.pm.PackageManager.PERMISSION_GRANTED;
-            String services = Settings.Secure.getString(getContentResolver(), "enabled_accessibility_services");
-            boolean enabled = services != null && services.contains(getPackageName() + "/");
-            accessState.setText(enabled ? R.string.access_on : R.string.access_off);
-            apiState.setText(getString(granted ? R.string.permission_ok : R.string.permission_missing)
-                + "\n" + getString(Bridge.running ? R.string.rest_ok : R.string.rest_off));
+            boolean enabled = isRemoteServiceEnabled();
+            setStatus(accessState, !enabled ? R.string.access_off : RemoteKeys.connected
+                ? R.string.access_on : R.string.access_waiting, enabled && RemoteKeys.connected);
+            setStatus(permissionState, granted ? R.string.permission_ok : R.string.permission_missing, granted);
+            StringBuilder hint = new StringBuilder();
+            if (!enabled) hint.append(getString(R.string.access_setup_hint));
+            else if (!RemoteKeys.connected) hint.append(getString(R.string.access_restart_hint));
+            if (!granted) {
+                if (hint.length() > 0) hint.append("\n\n");
+                hint.append(getString(R.string.permission_setup_hint));
+            }
+            setupHint.setText(hint.length() == 0 ? getString(R.string.setup_ready) : hint.toString());
+            apiState.setText(Bridge.running ? R.string.rest_ok : R.string.rest_off);
             handler.postDelayed(this, 1000);
         }
     };
@@ -76,8 +84,6 @@ public final class Setup extends Activity {
         settings.setPadding(dp(4), dp(4), dp(4), dp(4));
         LinearLayout remote = section(R.string.remote_title);
         remote.addView(text(getString(R.string.remote_hint), 15, muted, false));
-        accessState = text("", 14, muted, false);
-        remote.addView(accessState);
         capture = button(remote, "", () -> {
             testing = false;
             capturePreference = RemoteKeys.MODIFIER;
@@ -100,6 +106,13 @@ public final class Setup extends Activity {
             status.setText("");
         });
         button(remote, getString(R.string.accessibility), this::openAccessibility);
+        accessState = text("", 14, ink, false);
+        permissionState = text("", 14, ink, false);
+        setupHint = text("", 13, muted, false);
+        setupHint.setTextIsSelectable(true);
+        remote.addView(accessState);
+        remote.addView(permissionState);
+        remote.addView(setupHint);
         remote.addView(text(getString(R.string.key_help), 13, muted, false));
         settings.addView(remote);
 
@@ -228,26 +241,44 @@ public final class Setup extends Activity {
         capture.setText(key == 0 ? getString(R.string.assign)
             : getString(R.string.change_key, KeyEvent.keyCodeToString(key)));
     }
+    private void setStatus(TextView view, int label, boolean okay) {
+        view.setText(label);
+        if (Boolean.valueOf(okay).equals(view.getTag())) return;
+        GradientDrawable dot = new GradientDrawable();
+        dot.setShape(GradientDrawable.OVAL);
+        dot.setColor(okay ? 0xff2eaa58 : 0xffe24b4b);
+        dot.setBounds(0, 0, dp(10), dp(10));
+        view.setCompoundDrawablePadding(dp(10));
+        view.setCompoundDrawablesRelative(dot, null, null, null);
+        view.setTag(okay);
+    }
+    private boolean isRemoteServiceEnabled() {
+        if (Settings.Secure.getInt(getContentResolver(), "accessibility_enabled", 0) != 1) return false;
+        String services = Settings.Secure.getString(getContentResolver(), "enabled_accessibility_services");
+        if (services == null) return false;
+        ComponentName expected = new ComponentName(this, RemoteKeys.class);
+        for (String entry : services.split(":")) {
+            if (expected.equals(ComponentName.unflattenFromString(entry))) return true;
+        }
+        return false;
+    }
     private void openAccessibility() {
-        Intent direct = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-        if (direct.resolveActivity(getPackageManager()) != null) {
+        Intent request = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+        for (android.content.pm.ResolveInfo info : getPackageManager().queryIntentActivities(request, 0)) {
+            String pkg = info.activityInfo.packageName;
+            if (pkg.equals("com.google.android.tv.frameworkpackagestubs")) continue;
+            Intent direct = new Intent(request).setComponent(
+                new ComponentName(pkg, info.activityInfo.name));
             try { startActivity(direct); return; }
             catch (ActivityNotFoundException | SecurityException ignored) {}
         }
-        new AlertDialog.Builder(this).setTitle(R.string.accessibility)
-            .setMessage(R.string.access_fallback)
-            .setNegativeButton(R.string.cancel, null)
-            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                Intent settings = new Intent(Settings.ACTION_SETTINGS);
-                if (settings.resolveActivity(getPackageManager()) == null) {
-                    settings = new Intent().setComponent(new ComponentName(
-                        "com.android.tv.settings", "com.android.tv.settings.MainSettings"));
-                }
-                try { startActivity(settings); }
-                catch (ActivityNotFoundException | SecurityException error) {
-                    status.setText(R.string.access_fallback);
-                }
-            }).show();
+        Intent settings = new Intent(Settings.ACTION_SETTINGS);
+        try {
+            startActivity(settings);
+            Toast.makeText(this, R.string.access_fallback, Toast.LENGTH_LONG).show();
+        } catch (ActivityNotFoundException | SecurityException error) {
+            status.setText(R.string.access_fallback);
+        }
     }
     private void search() {
         connection.setText(R.string.searching);

@@ -50,6 +50,10 @@ adds a backlight entity for automations, such as dimming the screen at night.
 5. Turn off ADB. The shortcut and Home Assistant connection work without it,
    including after a reboot.
 
+The app shows whether its accessibility service is running and the ADB permission
+is granted, with green or red indicators and setup hints. On firmware without a
+direct Accessibility shortcut, the button opens TV settings and shows the menu path.
+
 ## Screen off
 
 In the app, optionally enable **Turn the screen off at 0%**, assign a separate
