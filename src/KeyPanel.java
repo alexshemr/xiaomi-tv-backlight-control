@@ -68,6 +68,15 @@ final class KeyPanel {
         passed.clear();
     }
 
+    static int nextLevel(int current, int delta, boolean repeat, boolean offAtZero) {
+        if (delta < 0) {
+            if (current <= 1 && !repeat && offAtZero) return 0;
+            return Math.max(1, current + delta);
+        }
+        if (current == 1 && delta > 0) return 5;
+        return Math.min(100, current + delta);
+    }
+
     private void change(int key, long time) {
         if (key == 19 || key == 20) {
             delta = key == 19 ? 5 : -5;

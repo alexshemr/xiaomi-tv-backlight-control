@@ -46,6 +46,14 @@ public final class KeyPanelTest {
         check(panel.down(1, 101, false, 1700, 100, 101, true)
             && !panel.wakeRequested && panel.screenOffRequested, "Off key stays off");
         panel.up(1, 101);
+        check(KeyPanel.nextLevel(5, -5, false, true) == 1, "Five stops at one");
+        check(KeyPanel.nextLevel(3, -5, false, true) == 1, "Small levels stop at one");
+        check(KeyPanel.nextLevel(1, -5, true, true) == 1, "Held down cannot switch off");
+        check(KeyPanel.nextLevel(1, -5, false, true) == 0, "Separate down switches off");
+        check(KeyPanel.nextLevel(1, -5, false, false) == 1, "Off option disabled stops at one");
+        check(KeyPanel.nextLevel(1, 5, false, true) == 5, "Up from one returns to five");
+        check(KeyPanel.nextLevel(100, 5, false, true) == 100, "Upper bound preserved");
+        check(KeyPanel.nextLevel(10, -5, true, true) == 5, "Normal repeats preserved");
         System.out.println("Key panel behavior passed");
     }
     private static void check(boolean condition, String message) {

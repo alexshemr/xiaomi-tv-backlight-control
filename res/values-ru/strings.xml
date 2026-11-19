@@ -43,7 +43,7 @@
     <string name="unsupported">Управление подсветкой недоступно на этой прошивке.</string>
 <string name="access_fallback">Откройте Настройки устройства → Специальные возможности → Подсветка Xiaomi TV.</string><string name="screen_off_title">Выключение экрана</string>
 <string name="screen_off_zero">Выключать экран при 0%</string>
-<string name="screen_off_hint" formatted="false">Необязательно. Настройка 0% действует и для команд Home Assistant. Любая кнопка возвращает изображение, кроме питания и кнопки гашения. Нажатие ↑ повышает 0% до 5%.</string>
+<string name="screen_off_hint" formatted="false">Необязательно. Настройка 0% действует и для команд Home Assistant. Любая кнопка возвращает изображение, кроме питания и кнопки гашения. Нажатие ↑ повышает 0% до 5%. Снижение с пульта останавливается на 1%. Если опция включена, отпустите ↓ и нажмите ещё раз для выключения экрана.</string>
 <string name="screen_off_assign">Назначить кнопку выключения экрана</string>
 <string name="screen_off_key">Выключение экрана · %1$s</string>
 <string name="screen_off_reset">Убрать кнопку выключения экрана</string>

@@ -45,7 +45,7 @@
   <string name="access_fallback">Open Device preferences → Accessibility → Xiaomi TV Backlight Control.</string>
 <string name="screen_off_title">Screen off</string>
 <string name="screen_off_zero">Turn the screen off at 0%</string>
-<string name="screen_off_hint" formatted="false">Optional. The 0% setting also applies to Home Assistant commands. Any remote key brings the screen back, except Power and the screen-off button. Up raises 0% to 5%.</string>
+<string name="screen_off_hint" formatted="false">Optional. The 0% setting also applies to Home Assistant commands. Any remote key brings the screen back, except Power and the screen-off button. Up raises 0% to 5%. Remote dimming stops at 1%. Release Down and press it again to turn the screen off when this option is enabled.</string>
 <string name="screen_off_assign">Assign a screen-off button</string>
 <string name="screen_off_key">Screen-off button · %1$s</string>
 <string name="screen_off_reset">Remove screen-off button</string>

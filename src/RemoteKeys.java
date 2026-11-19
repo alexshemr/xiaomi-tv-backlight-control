@@ -78,7 +78,8 @@ public final class RemoteKeys extends AccessibilityService {
             if (keys.delta == 0 && key == preferences.getInt(MODIFIER, 0)
                     && keys.visible) ScreenPower.setOff(this, false);
             if (keys.delta != 0 && !keys.wakeRequested) Backlight.write(this,
-                Math.max(0, Math.min(100, Backlight.read(this) + keys.delta)));
+                KeyPanel.nextLevel(Backlight.read(this), keys.delta, event.getRepeatCount() != 0,
+                    preferences.getBoolean("screen_off_at_zero", false)));
             if (ScreenPower.isOff(this)) {
                 dismiss.run();
             } else if (keys.visible) {

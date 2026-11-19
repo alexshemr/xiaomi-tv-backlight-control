@@ -60,6 +60,10 @@ In the app, optionally enable **Turn the screen off at 0%**, assign a separate
 screen-off button, or use both. Both options are disabled by default.
 The 0% option also applies to Home Assistant commands.
 
+Dimming with the remote stops at **1%**. If screen-off at 0% is enabled,
+release Down and press it again to turn the screen off. Holding Down stops at 1%.
+With screen-off disabled, 1% is the minimum when using the remote.
+
 While the screen is off, Up restores the image from 0% at 5%. Other remote buttons
 restore the image without passing that press to the app underneath. Power and the
 assigned screen-off button are excluded. Navigation, volume, menu, power and
